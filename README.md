@@ -3,13 +3,13 @@
 
 A multi-agent AI travel planner that creates and improves easygoing itineraries using specialized AI agents.
 
-The project uses three AI agents coordinated by a small deterministic Python workflow. The Trip Planner extracts requirements and selects flights, hotels, and activities. The Itinerary Composer builds and revises the day-by-day schedule, while the Pace and Quality Reviewer independently checks it. Relaxed pacing is the default: each day has at most one main activity, with downtime and light arrival and departure days.
+The project uses five AI roles coordinated by a small Python workflow: a Manager Agent, Flight Specialist, Hotel Specialist, Activity Specialist, and Critic Agent. The Manager extracts requirements, drafts the itinerary, and revises it after critique. Relaxed pacing is the default, with downtime and light arrival and departure days.
 
 ## Project Goal
 
 The goal of this mini-project is to extend a basic multi-agent travel planner so that it creates realistic itineraries without packing every day with activities.
 
-The Trip Planner favors activities tagged `relaxed-pace` or `easy-pace`. A deterministic Python check enforces a daily activity limit: one for relaxed, two for balanced, and three for packed itineraries.
+The Activity Specialist favors activities tagged `relaxed-pace` or `easy-pace`. A deterministic Python check enforces a daily activity limit: one for relaxed, two for balanced, and three for packed itineraries.
 
 ## Architecture
 
@@ -23,10 +23,10 @@ The OpenAI model performs the reasoning, while local JSON files provide sample f
 
 The project is customized for travelers who value a slower trip:
 
-* The Trip Planner records a `pace_preference`, defaulting to `relaxed`, and selects matching options from local inventory.
-* Activity inventory uses `relaxed-pace`, `easy-pace`, and `full-day` tags to guide activity selection.
-* The Itinerary Composer preserves breaks and keeps arrival and departure days especially light.
-* The Pace and Quality Reviewer flags overfilled days and missing downtime; Python validation enforces the selected pace limit.
+* The Manager records a `pace_preference`, defaulting to `relaxed`, and shares it with the specialists.
+* Activity inventory uses `relaxed-pace`, `easy-pace`, and `full-day` tags to guide the Activity Specialist.
+* The Manager preserves breaks and keeps arrival and departure days especially light.
+* The Critic flags overfilled days and missing downtime; Python validation enforces the selected pace limit.
 
 Example relaxed-pace request:
 
@@ -40,9 +40,9 @@ Plan a relaxed 4-day trip from Delhi to Dubai for two people. Prefer food, city 
 relaxed_pace_travel_planner/
 │
 ├── agents/
-│   ├── trip_planner.py
-│   ├── itinerary_composer.py
-│   └── pace_quality_reviewer.py
+│   ├── manager.py
+│   ├── workers.py        # Flight, Hotel, and Activity Specialists
+│   └── critic.py
 │
 ├── tools/
 │   └── travel_tools.py
@@ -63,9 +63,9 @@ relaxed_pace_travel_planner/
 
 ## How the Agents Work
 
-### Trip Planner
+### Manager Agent
 
-The planner first turns the user's request into structured requirements such as:
+The Manager turns the user's request into structured requirements such as:
 
 * Origin
 * Destination
@@ -75,37 +75,28 @@ The planner first turns the user's request into structured requirements such as:
 * Travel preferences
 * Requested pace (relaxed by default)
 
-Uncertain details are recorded as assumptions rather than invented. It then selects a flight, hotel, and a small pool of activities from the local inventory, returning exact IDs and considering the route, timing, hotel budget, interests, and requested pace.
+Uncertain details are recorded as assumptions rather than invented. The Manager coordinates the specialists, drafts the itinerary from their selected options, then revises it after critique.
 
-For relaxed trips, it prefers activities tagged:
+### Flight, Hotel, and Activity Specialists
 
-```text
-relaxed-pace
-easy-pace
-```
+Each specialist searches its matching local inventory and returns exact selected IDs. The Activity Specialist favors `relaxed-pace` and `easy-pace` activities for relaxed requests.
 
-Python validation enforces the selected pace limit even if the language model returns an overfilled day.
+### Critic Agent
 
-### Itinerary Composer
-
-The composer builds the day-by-day plan from the Trip Planner's approved options, then applies the reviewer's feedback without changing the grounded inventory.
-
-### Pace and Quality Reviewer
-
-The reviewer checks the draft for problems such as:
+The Critic checks the draft for problems such as:
 
 * Budget issues
 * Overloaded days
 * Unsupported assumptions
 * Poor activity pacing
 
-It provides actionable revision instructions without replacing inventory selections.
+It provides actionable revision instructions without replacing specialist inventory selections.
 
-For relaxed trips, the auditor checks for more than one main activity per day, insufficient breaks, and overfilled arrival or departure days.
+For relaxed trips, the Critic checks for more than one main activity per day, insufficient breaks, and overfilled arrival or departure days. Python validation also enforces the selected pace limit.
 
 ### Revision
 
-The Itinerary Composer applies the review feedback. The orchestrator then validates IDs, day count, pace limits, and budget totals before returning the final plan.
+The Manager applies the Critic's feedback. The orchestrator then validates IDs, day count, pace limits, and budget totals before returning the final plan.
 
 ## Setup
 
@@ -181,7 +172,7 @@ Example:
 python main.py --request "Plan a relaxed 4-day trip from Delhi to Dubai for two people. Prefer food, city views, and cultural sites. Schedule no more than one main activity per day, leave generous breaks and unplanned time, and avoid red-eye flights."
 ```
 
-For a relaxed request, the Trip Planner can select lighter activities such as:
+For a relaxed request, the Activity Specialist can select lighter activities such as:
 
 * Old Dubai souks and creek abra ride
 * Al Fahidi heritage quarter
@@ -206,14 +197,17 @@ python main.py --request "Plan a relaxed 4-day trip from Delhi to Dubai for two 
 The trace shows:
 
 ```text
-Trip Planner extracts requirements
-and selects flight, hotel, and activities
+Manager extracts requirements
         |
         v
-Draft itinerary by Itinerary Composer
+Flight, Hotel, and Activity Specialists
+select from local inventories
         |
         v
-Pace and Quality Reviewer feedback
+Manager drafts the itinerary
+        |
+        v
+Critic Agent feedback
         |
         v
 Revision instructions
@@ -237,7 +231,7 @@ Desert conservation safari
 Tags: nature, adventure, premium, full-day
 ```
 
-These tags help the Trip Planner choose suitable activities without overfilling the day.
+These tags help the Activity Specialist choose suitable options without overfilling the day.
 
 ## Technologies Used
 
@@ -253,7 +247,7 @@ These tags help the Trip Planner choose suitable activities without overfilling 
 This project demonstrates:
 
 * Multi-agent AI architecture
-* A three-agent workflow
+* A five-agent workflow with three specialist roles
 * Tool-grounded agent decisions
 * Structured outputs using Pydantic
 * Independent review and refinement
@@ -293,5 +287,5 @@ The test successfully demonstrated:
 
 This project extends the base Multi-Agent Travel Planner into a relaxed-pace travel planning system.
 
-The main customization is the pace-aware workflow: the Trip Planner favors lighter activities, the Itinerary Composer preserves downtime, and deterministic validation prevents relaxed itineraries from exceeding one main activity per day.
+The main customization is the pace-aware workflow: the Activity Specialist favors lighter options, the Manager preserves downtime, and deterministic validation prevents relaxed itineraries from exceeding one main activity per day.
 

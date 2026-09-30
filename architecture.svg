@@ -1,6 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="900" viewBox="0 0 1200 900" role="img" aria-labelledby="title description">
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="1120" viewBox="0 0 1400 1120" role="img" aria-labelledby="title description">
   <title id="title">Relaxed-Pace Travel Planner Architecture</title>
-  <desc id="description">A three-agent travel planning workflow coordinated by a Python orchestrator, using local JSON travel inventory and deterministic validation.</desc>
+  <desc id="description">A Manager Agent coordinates Flight, Hotel, and Activity Specialists, then creates a draft reviewed by a Critic Agent before revising the plan.</desc>
   <defs>
     <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto" markerUnits="strokeWidth">
       <path d="M 0 0 L 10 5 L 0 10 z" fill="#315d56" />
@@ -9,8 +9,8 @@
       <path d="M 0 0 L 10 5 L 0 10 z" fill="#b76a4f" />
     </marker>
     <style>
-      .title { font: 700 34px 'Aptos Display', 'Segoe UI', sans-serif; fill: #18332f; }
-      .subtitle { font: 400 16px 'Aptos', 'Segoe UI', sans-serif; fill: #59706b; }
+      .title { font: 700 36px 'Aptos Display', 'Segoe UI', sans-serif; fill: #18332f; }
+      .subtitle { font: 400 17px 'Aptos', 'Segoe UI', sans-serif; fill: #59706b; }
       .label { font: 700 12px 'Aptos', 'Segoe UI', sans-serif; letter-spacing: 1.4px; fill: #52706a; }
       .card-title { font: 700 20px 'Aptos Display', 'Segoe UI', sans-serif; fill: #18332f; }
       .card-copy { font: 400 14px 'Aptos', 'Segoe UI', sans-serif; fill: #49615c; }
@@ -24,68 +24,97 @@
     </style>
   </defs>
 
-  <rect width="1200" height="900" fill="#f3f5f1" />
-  <path d="M0 0 H1200 V12 H0 Z" fill="#d07859" />
+  <rect width="1400" height="1120" fill="#f3f5f1" />
+  <path d="M0 0 H1400 V12 H0 Z" fill="#d07859" />
 
-  <text x="64" y="66" class="title">Relaxed-Pace Travel Planner</text>
-  <text x="66" y="96" class="subtitle">Three AI agents, local travel inventory, and deterministic Python checks</text>
+  <text x="70" y="68" class="title">Relaxed-Pace Travel Planner</text>
+  <text x="72" y="101" class="subtitle">Manager + three travel specialists + independent Critic</text>
 
-  <rect x="430" y="126" width="340" height="72" rx="12" fill="#ffffff" stroke="#cad6d0" stroke-width="1.5" />
-  <text x="600" y="155" text-anchor="middle" class="label">INPUT</text>
-  <text x="600" y="179" text-anchor="middle" class="card-title">Traveler request</text>
+  <rect x="520" y="126" width="360" height="70" rx="12" fill="#ffffff" stroke="#cad6d0" stroke-width="1.5" />
+  <text x="700" y="154" text-anchor="middle" class="label">INPUT</text>
+  <text x="700" y="179" text-anchor="middle" class="card-title">Traveler request</text>
 
-  <rect x="42" y="230" width="1116" height="620" rx="18" fill="#f8faf7" stroke="#b9c9c2" stroke-width="1.5" />
-  <rect x="64" y="216" width="286" height="28" rx="7" fill="#315d56" />
-  <text x="207" y="235" text-anchor="middle" class="step">PYTHON ORCHESTRATOR</text>
+  <rect x="42" y="225" width="1316" height="850" rx="18" fill="#f8faf7" stroke="#b9c9c2" stroke-width="1.5" />
+  <rect x="64" y="210" width="306" height="28" rx="7" fill="#315d56" />
+  <text x="217" y="229" text-anchor="middle" class="step">PYTHON ORCHESTRATOR</text>
 
-  <path d="M600 198 V270" class="flow" />
+  <path d="M700 196 V256" class="flow" />
 
-  <rect x="78" y="286" width="238" height="134" rx="12" fill="#fff6ee" stroke="#d9a184" stroke-width="1.5" />
-  <text x="100" y="316" class="label" fill="#a85e43">LOCAL INVENTORY</text>
-  <text x="100" y="348" class="card-title" font-size="18">JSON data</text>
-  <text x="100" y="374" class="card-copy">sample_flights.json</text>
-  <text x="100" y="395" class="card-copy">sample_hotels.json</text>
-  <text x="100" y="416" class="card-copy">sample_activities.json</text>
+  <rect x="80" y="266" width="300" height="142" rx="12" fill="#fff6ee" stroke="#d9a184" stroke-width="1.5" />
+  <text x="104" y="296" class="label" fill="#a85e43">LOCAL INVENTORY</text>
+  <text x="104" y="329" class="card-title" font-size="18">JSON data</text>
+  <text x="104" y="354" class="card-copy">sample_flights.json</text>
+  <text x="104" y="376" class="card-copy">sample_hotels.json</text>
+  <text x="104" y="398" class="card-copy">sample_activities.json</text>
 
-  <rect x="386" y="270" width="460" height="132" rx="14" fill="#e3f0eb" stroke="#4e8277" stroke-width="2" />
-  <circle cx="416" cy="300" r="14" fill="#315d56" />
-  <text x="416" y="304" text-anchor="middle" class="step">1</text>
-  <text x="442" y="306" class="card-title">Trip Planner</text>
-  <text x="414" y="340" class="card-copy">Extracts requirements, then selects an exact flight,</text>
-  <text x="414" y="361" class="card-copy">hotel, and activity pool from available records.</text>
-  <text x="414" y="385" class="small">Respects interests, budget, route, and requested pace</text>
+  <rect x="475" y="256" width="450" height="104" rx="14" fill="#e3f0eb" stroke="#4e8277" stroke-width="2" />
+  <circle cx="506" cy="286" r="14" fill="#315d56" />
+  <text x="506" y="290" text-anchor="middle" class="step">1</text>
+  <text x="532" y="292" class="card-title">Manager Agent</text>
+  <text x="503" y="325" class="card-copy">Extracts trip requirements and shares a planning brief.</text>
+  <text x="503" y="347" class="small">Records uncertainty as assumptions; defaults to relaxed pace.</text>
 
-  <path d="M316 352 H386" class="side-flow" />
+  <path d="M700 360 V386 H265 V417" class="flow" />
+  <path d="M700 386 V417" class="flow" />
+  <path d="M700 386 H1135 V417" class="flow" />
 
-  <path d="M616 402 V442" class="flow" />
-  <rect x="386" y="444" width="460" height="94" rx="14" fill="#ffffff" stroke="#8ea8a0" stroke-width="1.7" />
-  <circle cx="416" cy="473" r="14" fill="#49796f" />
-  <text x="416" y="477" text-anchor="middle" class="step">2</text>
-  <text x="442" y="478" class="card-title">Itinerary Composer</text>
-  <text x="414" y="510" class="card-copy">Drafts a day-by-day plan with breaks and open time.</text>
+  <path d="M380 337 H408 V395 H265 V417" class="dashed" />
+  <path d="M408 395 H700 V417" class="dashed" />
+  <path d="M408 395 H1135 V417" class="dashed" />
 
-  <path d="M616 538 V570" class="flow" />
-  <rect x="386" y="572" width="460" height="94" rx="14" fill="#fbede5" stroke="#d58b6e" stroke-width="1.7" />
-  <circle cx="416" cy="601" r="14" fill="#b76a4f" />
-  <text x="416" y="605" text-anchor="middle" class="step">3</text>
-  <text x="442" y="606" class="card-title">Pace and Quality Reviewer</text>
-  <text x="414" y="638" class="card-copy">Flags pacing, budget, constraint, and assumption issues.</text>
+  <rect x="80" y="420" width="370" height="130" rx="14" fill="#fff6ee" stroke="#d9a184" stroke-width="1.7" />
+  <circle cx="108" cy="449" r="14" fill="#b76a4f" />
+  <text x="108" y="453" text-anchor="middle" class="step">2</text>
+  <text x="134" y="455" class="card-title">Flight Specialist</text>
+  <text x="106" y="488" class="card-copy">Chooses a route-matching flight.</text>
+  <text x="106" y="512" class="small">Checks timing, fare, and red-eye preference.</text>
 
-  <path d="M616 666 V698" class="flow" />
-  <rect x="386" y="700" width="460" height="94" rx="14" fill="#315d56" stroke="#244740" stroke-width="1.5" />
-  <text x="414" y="736" class="white-title">Itinerary Composer</text>
-  <text x="414" y="764" class="white-copy">Revises from review feedback; Python rechecks IDs, pace, and budget.</text>
+  <rect x="515" y="420" width="370" height="130" rx="14" fill="#fff6ee" stroke="#d9a184" stroke-width="1.7" />
+  <circle cx="543" cy="449" r="14" fill="#b76a4f" />
+  <text x="543" y="453" text-anchor="middle" class="step">3</text>
+  <text x="569" y="455" class="card-title">Hotel Specialist</text>
+  <text x="541" y="488" class="card-copy">Chooses destination accommodation.</text>
+  <text x="541" y="512" class="small">Checks location, preferences, and stay budget.</text>
 
-  <rect x="78" y="618" width="238" height="118" rx="12" fill="#edf1e6" stroke="#b2bf9b" stroke-width="1.5" />
-  <text x="100" y="648" class="label">DETERMINISTIC CHECKS</text>
-  <text x="100" y="678" class="card-copy">Approved inventory IDs</text>
-  <text x="100" y="700" class="card-copy">Daily pace limits</text>
-  <text x="100" y="722" class="card-copy">Budget totals calculated in Python</text>
-  <path d="M316 678 H350 V746 H386" class="dashed" />
+  <rect x="950" y="420" width="370" height="130" rx="14" fill="#fff6ee" stroke="#d9a184" stroke-width="1.7" />
+  <circle cx="978" cy="449" r="14" fill="#b76a4f" />
+  <text x="978" y="453" text-anchor="middle" class="step">4</text>
+  <text x="1004" y="455" class="card-title">Activity Specialist</text>
+  <text x="976" y="488" class="card-copy">Selects activities for interests and pace.</text>
+  <text x="976" y="512" class="small">Favors easy or relaxed options when requested.</text>
 
-  <path d="M846 747 H900" class="side-flow" />
-  <rect x="902" y="714" width="220" height="66" rx="12" fill="#f1ce82" stroke="#c99e4c" stroke-width="1.5" />
-  <text x="1012" y="741" text-anchor="middle" class="label" fill="#624b24">OUTPUT</text>
-  <text x="1012" y="764" text-anchor="middle" class="card-title" font-size="17">Final travel plan</text>
+  <path d="M265 550 V578 H700 V604" class="flow" />
+  <path d="M700 550 V604" class="flow" />
+  <path d="M1135 550 V578 H700 V604" class="flow" />
+
+  <rect x="475" y="606" width="450" height="82" rx="14" fill="#ffffff" stroke="#8ea8a0" stroke-width="1.7" />
+  <circle cx="506" cy="636" r="14" fill="#49796f" />
+  <text x="506" y="640" text-anchor="middle" class="step">5</text>
+  <text x="532" y="642" class="card-title">Manager drafts itinerary</text>
+  <text x="503" y="671" class="card-copy">Combines approved options into a relaxed day-by-day plan.</text>
+
+  <path d="M700 688 V717" class="flow" />
+  <rect x="475" y="719" width="450" height="82" rx="14" fill="#fbede5" stroke="#d58b6e" stroke-width="1.7" />
+  <circle cx="506" cy="749" r="14" fill="#b76a4f" />
+  <text x="506" y="753" text-anchor="middle" class="step">6</text>
+  <text x="532" y="755" class="card-title">Critic Agent</text>
+  <text x="503" y="784" class="card-copy">Flags budget, pacing, constraint, and assumption issues.</text>
+
+  <path d="M700 801 V830" class="flow" />
+  <rect x="475" y="832" width="450" height="88" rx="14" fill="#315d56" stroke="#244740" stroke-width="1.5" />
+  <text x="503" y="869" class="white-title">Manager revises itinerary</text>
+  <text x="503" y="897" class="white-copy">Applies critique while preserving selected options.</text>
+
+  <rect x="80" y="705" width="300" height="150" rx="12" fill="#edf1e6" stroke="#b2bf9b" stroke-width="1.5" />
+  <text x="104" y="735" class="label">PYTHON VALIDATION</text>
+  <text x="104" y="769" class="card-copy">Approved inventory IDs</text>
+  <text x="104" y="793" class="card-copy">Daily activity limits</text>
+  <text x="104" y="817" class="card-copy">Budget totals recalculated</text>
+  <path d="M380 780 H425 V876 H475" class="dashed" />
+
+  <path d="M925 876 H982" class="side-flow" />
+  <rect x="984" y="844" width="245" height="66" rx="12" fill="#f1ce82" stroke="#c99e4c" stroke-width="1.5" />
+  <text x="1106" y="871" text-anchor="middle" class="label" fill="#624b24">OUTPUT</text>
+  <text x="1106" y="894" text-anchor="middle" class="card-title" font-size="17">Final travel plan</text>
 
 </svg>

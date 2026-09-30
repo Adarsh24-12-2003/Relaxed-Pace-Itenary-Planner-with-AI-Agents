@@ -21,7 +21,7 @@ def main() -> None:
     args = parser.parse_args()
 
     print(
-        "Running Trip Planner, Itinerary Composer, and Pace and Quality Reviewer...\n"
+        "Running Manager, Flight, Hotel, Activity, and Critic agents...\n"
     )
     result = run_pipeline(args.request)
 
