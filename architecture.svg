@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="900" viewBox="0 0 1200 900" role="img" aria-labelledby="title description">
+  <title id="title">Relaxed-Pace Travel Planner Architecture</title>
+  <desc id="description">A three-agent travel planning workflow coordinated by a Python orchestrator, using local JSON travel inventory and deterministic validation.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto" markerUnits="strokeWidth">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#315d56" />
+    </marker>
+    <marker id="arrow-light" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto" markerUnits="strokeWidth">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#b76a4f" />
+    </marker>
+    <style>
+      .title { font: 700 34px 'Aptos Display', 'Segoe UI', sans-serif; fill: #18332f; }
+      .subtitle { font: 400 16px 'Aptos', 'Segoe UI', sans-serif; fill: #59706b; }
+      .label { font: 700 12px 'Aptos', 'Segoe UI', sans-serif; letter-spacing: 1.4px; fill: #52706a; }
+      .card-title { font: 700 20px 'Aptos Display', 'Segoe UI', sans-serif; fill: #18332f; }
+      .card-copy { font: 400 14px 'Aptos', 'Segoe UI', sans-serif; fill: #49615c; }
+      .small { font: 400 12px 'Aptos', 'Segoe UI', sans-serif; fill: #617771; }
+      .step { font: 700 12px 'Aptos', 'Segoe UI', sans-serif; fill: #ffffff; }
+      .white-title { font: 700 19px 'Aptos Display', 'Segoe UI', sans-serif; fill: #ffffff; }
+      .white-copy { font: 400 13px 'Aptos', 'Segoe UI', sans-serif; fill: #e4efeb; }
+      .flow { fill: none; stroke: #315d56; stroke-width: 2.5; marker-end: url(#arrow); }
+      .side-flow { fill: none; stroke: #b76a4f; stroke-width: 2.2; marker-end: url(#arrow-light); }
+      .dashed { fill: none; stroke: #829790; stroke-width: 1.8; stroke-dasharray: 6 6; marker-end: url(#arrow); }
+    </style>
+  </defs>
+
+  <rect width="1200" height="900" fill="#f3f5f1" />
+  <path d="M0 0 H1200 V12 H0 Z" fill="#d07859" />
+
+  <text x="64" y="66" class="title">Relaxed-Pace Travel Planner</text>
+  <text x="66" y="96" class="subtitle">Three AI agents, local travel inventory, and deterministic Python checks</text>
+
+  <rect x="430" y="126" width="340" height="72" rx="12" fill="#ffffff" stroke="#cad6d0" stroke-width="1.5" />
+  <text x="600" y="155" text-anchor="middle" class="label">INPUT</text>
+  <text x="600" y="179" text-anchor="middle" class="card-title">Traveler request</text>
+
+  <rect x="42" y="230" width="1116" height="620" rx="18" fill="#f8faf7" stroke="#b9c9c2" stroke-width="1.5" />
+  <rect x="64" y="216" width="286" height="28" rx="7" fill="#315d56" />
+  <text x="207" y="235" text-anchor="middle" class="step">PYTHON ORCHESTRATOR</text>
+
+  <path d="M600 198 V270" class="flow" />
+
+  <rect x="78" y="286" width="238" height="134" rx="12" fill="#fff6ee" stroke="#d9a184" stroke-width="1.5" />
+  <text x="100" y="316" class="label" fill="#a85e43">LOCAL INVENTORY</text>
+  <text x="100" y="348" class="card-title" font-size="18">JSON data</text>
+  <text x="100" y="374" class="card-copy">sample_flights.json</text>
+  <text x="100" y="395" class="card-copy">sample_hotels.json</text>
+  <text x="100" y="416" class="card-copy">sample_activities.json</text>
+
+  <rect x="386" y="270" width="460" height="132" rx="14" fill="#e3f0eb" stroke="#4e8277" stroke-width="2" />
+  <circle cx="416" cy="300" r="14" fill="#315d56" />
+  <text x="416" y="304" text-anchor="middle" class="step">1</text>
+  <text x="442" y="306" class="card-title">Trip Planner</text>
+  <text x="414" y="340" class="card-copy">Extracts requirements, then selects an exact flight,</text>
+  <text x="414" y="361" class="card-copy">hotel, and activity pool from available records.</text>
+  <text x="414" y="385" class="small">Respects interests, budget, route, and requested pace</text>
+
+  <path d="M316 352 H386" class="side-flow" />
+
+  <path d="M616 402 V442" class="flow" />
+  <rect x="386" y="444" width="460" height="94" rx="14" fill="#ffffff" stroke="#8ea8a0" stroke-width="1.7" />
+  <circle cx="416" cy="473" r="14" fill="#49796f" />
+  <text x="416" y="477" text-anchor="middle" class="step">2</text>
+  <text x="442" y="478" class="card-title">Itinerary Composer</text>
+  <text x="414" y="510" class="card-copy">Drafts a day-by-day plan with breaks and open time.</text>
+
+  <path d="M616 538 V570" class="flow" />
+  <rect x="386" y="572" width="460" height="94" rx="14" fill="#fbede5" stroke="#d58b6e" stroke-width="1.7" />
+  <circle cx="416" cy="601" r="14" fill="#b76a4f" />
+  <text x="416" y="605" text-anchor="middle" class="step">3</text>
+  <text x="442" y="606" class="card-title">Pace and Quality Reviewer</text>
+  <text x="414" y="638" class="card-copy">Flags pacing, budget, constraint, and assumption issues.</text>
+
+  <path d="M616 666 V698" class="flow" />
+  <rect x="386" y="700" width="460" height="94" rx="14" fill="#315d56" stroke="#244740" stroke-width="1.5" />
+  <text x="414" y="736" class="white-title">Itinerary Composer</text>
+  <text x="414" y="764" class="white-copy">Revises from review feedback; Python rechecks IDs, pace, and budget.</text>
+
+  <rect x="78" y="618" width="238" height="118" rx="12" fill="#edf1e6" stroke="#b2bf9b" stroke-width="1.5" />
+  <text x="100" y="648" class="label">DETERMINISTIC CHECKS</text>
+  <text x="100" y="678" class="card-copy">Approved inventory IDs</text>
+  <text x="100" y="700" class="card-copy">Daily pace limits</text>
+  <text x="100" y="722" class="card-copy">Budget totals calculated in Python</text>
+  <path d="M316 678 H350 V746 H386" class="dashed" />
+
+  <path d="M846 747 H900" class="side-flow" />
+  <rect x="902" y="714" width="220" height="66" rx="12" fill="#f1ce82" stroke="#c99e4c" stroke-width="1.5" />
+  <text x="1012" y="741" text-anchor="middle" class="label" fill="#624b24">OUTPUT</text>
+  <text x="1012" y="764" text-anchor="middle" class="card-title" font-size="17">Final travel plan</text>
+
+</svg>

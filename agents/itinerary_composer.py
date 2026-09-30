@@ -1,26 +1,8 @@
-"""Manager agent that coordinates workers, critique, and revision."""
+"""Itinerary composition and deterministic validation."""
 
-from __future__ import annotations
-
-from agents.critic import critique_itinerary
-from agents.workers import run_activity_worker, run_flight_worker, run_hotel_worker
 from models import BudgetBreakdown, Critique, DraftItinerary, FinalItinerary, TravelRequirements
-from tools.travel_tools import estimate_budget, load_travel_data
+from tools.travel_tools import estimate_budget
 from utils import ask_model
-
-
-def extract_requirements(user_request: str) -> TravelRequirements:
-    """Turn the user's request into the contract shared by all workers."""
-    return ask_model(
-        system_prompt=(
-            "You are the manager of a travel-planning team. Extract only information "
-            "supported by the user request. Put uncertain details in assumptions. "
-            "Do not invent dates or budgets. Set pace_preference to 'relaxed' unless "
-            "the user clearly asks for a balanced or packed itinerary."
-        ),
-        payload={"user_request": user_request},
-        output_model=TravelRequirements,
-    )
 
 
 def _selected_inventory(worker_outputs: dict) -> tuple[dict, dict, list[dict]]:
@@ -30,8 +12,8 @@ def _selected_inventory(worker_outputs: dict) -> tuple[dict, dict, list[dict]]:
     return flight, hotel, activities
 
 
-def _manager_context(worker_outputs: dict) -> dict:
-    """Give the manager decisions and approved records, not rejected options."""
+def _composer_context(worker_outputs: dict) -> dict:
+    """Give the composer agent decisions and approved records."""
     return {
         name: {
             "decision": output["trace"]["decision"],
@@ -52,28 +34,31 @@ def _ground_itinerary(
     allowed_activity_ids = {item["activity_id"] for item in activities}
 
     if itinerary.selected_flight_id != flight["flight_id"]:
-        raise ValueError("Manager selected a flight outside the flight worker's result.")
+        raise ValueError("Itinerary Composer selected a flight outside the Trip Planner's result.")
     if itinerary.selected_hotel_id != hotel["hotel_id"]:
-        raise ValueError("Manager selected a hotel outside the hotel worker's result.")
+        raise ValueError("Itinerary Composer selected a hotel outside the Trip Planner's result.")
 
     planned_ids = [item_id for day in itinerary.days for item_id in day.activity_ids]
     if not set(planned_ids).issubset(allowed_activity_ids):
-        raise ValueError("Manager used an activity outside the activity worker's result.")
+        raise ValueError("Itinerary Composer used an activity outside the Trip Planner's result.")
     if len(planned_ids) != len(set(planned_ids)):
-        raise ValueError("Manager repeated an activity on more than one day.")
+        raise ValueError("Itinerary Composer repeated an activity on multiple days.")
     if len(itinerary.days) != requirements.duration_days:
-        raise ValueError("Manager created the wrong number of day blocks.")
+        raise ValueError("Itinerary Composer created the wrong number of day blocks.")
 
     activity_limit = {"relaxed": 1, "balanced": 2, "packed": 3}[
         requirements.pace_preference
     ]
     if any(len(day.activity_ids) > activity_limit for day in itinerary.days):
         raise ValueError(
-            f"Manager exceeded the {requirements.pace_preference} pace limit "
+            f"Itinerary Composer exceeded the {requirements.pace_preference} pace limit "
             f"of {activity_limit} activities per day."
         )
 
-    planned_activities = [item for item in activities if item["activity_id"] in set(planned_ids)]
+    planned_activity_ids = set(planned_ids)
+    planned_activities = [
+        item for item in activities if item["activity_id"] in planned_activity_ids
+    ]
     itinerary.budget = BudgetBreakdown(
         **estimate_budget(requirements, flight, hotel, planned_activities)
     )
@@ -146,12 +131,11 @@ def _repair_final_inventory(final: FinalItinerary, worker_outputs: dict) -> None
 
     if final.selected_flight_id != flight["flight_id"]:
         final.selected_flight_id = flight["flight_id"]
-        corrections.append("Restored the flight selected by the flight worker.")
+        corrections.append("Restored the flight selected by the Trip Planner.")
     if final.selected_hotel_id != hotel["hotel_id"]:
         final.selected_hotel_id = hotel["hotel_id"]
-        corrections.append("Restored the hotel selected by the hotel worker.")
+        corrections.append("Restored the hotel selected by the Trip Planner.")
 
-    # Keep the final occurrence when the refiner intended to move an activity.
     seen_ids: set[str] = set()
     for day in reversed(final.days):
         valid_ids = []
@@ -171,20 +155,20 @@ def create_draft(
     requirements: TravelRequirements,
     worker_outputs: dict,
 ) -> DraftItinerary:
-    """Combine specialist recommendations into the first itinerary."""
+    """Build the first itinerary from approved specialist recommendations."""
     draft = ask_model(
         system_prompt=(
-            "You are the manager of a travel-planning team. Build a practical, "
-            "day-wise itinerary using only the workers' selected option IDs. Respect "
-            "pace_preference: relaxed means at most one main activity per day, generous "
-            "breaks, and open time; do not fill every day just because options exist. "
-            "Keep arrival and departure days especially light. Mention recovery time "
-            "and meal breaks in day notes. Use each activity at most once. Explain "
-            "trade-offs and state assumptions. The budget field will be verified by Python."
+            "You are the Itinerary Composer. Build a practical, day-wise itinerary "
+            "using only the agents' selected option IDs. Respect pace_preference: "
+            "relaxed means at most one main activity per day, generous breaks, and "
+            "open time; do not fill every day just because options exist. Keep arrival "
+            "and departure days especially light. Mention recovery time and meal breaks "
+            "in day notes. Use each activity at most once. Explain trade-offs and state "
+            "assumptions. The budget field will be verified by Python."
         ),
         payload={
             "requirements": requirements.model_dump(),
-            "worker_outputs": _manager_context(worker_outputs),
+            "worker_outputs": _composer_context(worker_outputs),
         },
         output_model=DraftItinerary,
     )
@@ -199,22 +183,22 @@ def refine_itinerary(
     critique: Critique,
     worker_outputs: dict,
 ) -> FinalItinerary:
-    """Apply the critic's instructions without changing grounded inventory."""
+    """Apply reviewer feedback without changing grounded inventory."""
     prompt = (
-        "You are the manager revising a travel plan after critique. Fix only the "
-        "identified problems. Keep all choices grounded in worker-selected IDs, "
+        "You are the Itinerary Composer revising a travel plan after review. Fix only "
+        "the identified problems. Keep all choices grounded in agent-selected IDs, "
         "preserve good parts, and list the changes made. Respect the requested pace "
         "limit per day, preserve breaks and open time, and do not add activities just "
-        "to fill the schedule. Return exactly one day "
-        "block per trip day. Every activity ID may appear at most once: moving an "
-        "activity means removing it from its old day, not copying it. An arrival "
-        "or departure day may have an empty activity list."
+        "to fill the schedule. Return exactly one day block per trip day. Every "
+        "activity ID may appear at most once: moving an activity means removing it "
+        "from its old day, not copying it. An arrival or departure day may have an "
+        "empty activity list."
     )
     payload = {
         "requirements": requirements.model_dump(),
         "draft_itinerary": draft.model_dump(),
         "critique": critique.model_dump(),
-        "worker_outputs": _manager_context(worker_outputs),
+        "worker_outputs": _composer_context(worker_outputs),
     }
 
     final = ask_model(
@@ -230,8 +214,8 @@ def refine_itinerary(
     return final
 
 
-def _display_plan(final: FinalItinerary, worker_outputs: dict) -> dict:
-    """Replace IDs with the actual local inventory records for readable output."""
+def display_plan(final: FinalItinerary, worker_outputs: dict) -> dict:
+    """Replace IDs with local inventory records for readable output."""
     flight, hotel, activities = _selected_inventory(worker_outputs)
     activity_by_id = {item["activity_id"]: item for item in activities}
     days = []
@@ -252,28 +236,4 @@ def _display_plan(final: FinalItinerary, worker_outputs: dict) -> dict:
         "assumptions": final.assumptions,
         "changes_after_critique": final.changes_after_critique,
         "final_notes": final.final_notes,
-    }
-
-
-def run_pipeline(user_request: str) -> dict:
-    """Run manager -> workers -> draft -> critic -> revision."""
-    travel_data = load_travel_data()
-    requirements = extract_requirements(user_request)
-
-    worker_outputs = {
-        "flight": run_flight_worker(requirements, travel_data["flights"]),
-        "hotel": run_hotel_worker(requirements, travel_data["hotels"]),
-        "activities": run_activity_worker(requirements, travel_data["activities"]),
-    }
-
-    draft = create_draft(requirements, worker_outputs)
-    critique = critique_itinerary(requirements, draft, worker_outputs)
-    final = refine_itinerary(requirements, draft, critique, worker_outputs)
-
-    return {
-        "requirements": requirements.model_dump(),
-        "worker_outputs": worker_outputs,
-        "draft_itinerary": draft.model_dump(),
-        "critique": critique.model_dump(),
-        "final_output": _display_plan(final, worker_outputs),
     }

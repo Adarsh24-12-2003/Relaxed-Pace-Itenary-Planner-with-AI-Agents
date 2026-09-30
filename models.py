@@ -18,12 +18,11 @@ class TravelRequirements(BaseModel):
     assumptions: list[str]
 
 
-class WorkerDecision(BaseModel):
-    worker: Literal["flight", "hotel", "activities"]
+class TripPlanDecision(BaseModel):
+    selected_flight_id: str
+    selected_hotel_id: str
+    selected_activity_ids: list[str]
     reason: str
-    action: str
-    observation: str
-    selected_ids: list[str]
     decision: str
     tradeoffs: list[str]
 

@@ -1,155 +1,101 @@
 [
   {
-    "activity_id": "SG-A01",
-    "destination": "Singapore",
-    "name": "Chinatown and Maxwell Food Centre walk",
-    "area": "Chinatown",
-    "duration_hours": 3,
-    "best_time": "Evening",
-    "cost_inr": 1600,
-    "tags": [
-      "food",
-      "culture",
-      "walkable",
-      "low-cost",
-      "relaxed-pace"
-    ],
-    "notes": "Works well on arrival day if the flight lands before evening."
-  },
-  {
-    "activity_id": "SG-A02",
-    "destination": "Singapore",
-    "name": "Gardens by the Bay + Marina Bay walk",
-    "area": "Marina Bay",
-    "duration_hours": 5,
-    "best_time": "Afternoon to night",
-    "cost_inr": 2800,
-    "tags": [
-      "views",
-      "landmark",
-      "nature",
-      "photo"
-    ],
-    "notes": "Pairs well with sunset and the evening light show."
-  },
-  {
-    "activity_id": "SG-A03",
-    "destination": "Singapore",
-    "name": "National Gallery and Civic District",
-    "area": "Civic District",
-    "duration_hours": 4,
-    "best_time": "Morning",
-    "cost_inr": 1200,
-    "tags": [
-      "culture",
-      "museum",
-      "history",
-      "indoor",
-      "easy-pace"
-    ],
-    "notes": "Good choice for culture-focused travellers."
-  },
-  {
-    "activity_id": "SG-A04",
-    "destination": "Singapore",
-    "name": "Kampong Glam food and heritage trail",
-    "area": "Bugis",
-    "duration_hours": 3,
-    "best_time": "Late afternoon",
-    "cost_inr": 1500,
-    "tags": [
-      "food",
-      "culture",
-      "walkable",
-      "low-cost",
-      "relaxed-pace"
-    ],
-    "notes": "Fits well with a Bugis hotel base."
-  },
-  {
-    "activity_id": "SG-A05",
-    "destination": "Singapore",
-    "name": "Sentosa half-day: beaches and cable car",
-    "area": "Sentosa",
-    "duration_hours": 6,
-    "best_time": "Morning to afternoon",
-    "cost_inr": 5200,
-    "tags": [
-      "leisure",
-      "views",
-      "family",
-      "premium",
-      "full-day"
-    ],
-    "notes": "Good optional add-on but can stretch the budget."
-  },
-  {
-    "activity_id": "SG-A06",
-    "destination": "Singapore",
-    "name": "Hawker centre tasting route",
-    "area": "Multiple",
-    "duration_hours": 4,
-    "best_time": "Lunch or dinner",
-    "cost_inr": 2200,
-    "tags": [
-      "food",
-      "local",
-      "low-cost",
-      "easy-pace"
-    ],
-    "notes": "Strong fit for food-focused travellers."
-    },
-
-  {
-    "activity_id": "SG-A07",
-    "destination": "Singapore",
-    "name": "Singapore Zoo",
-    "area": "Mandai",
-    "duration_hours": 5,
-    "best_time": "Morning",
-    "cost_inr": 3500,
-    "tags": [
-      "family",
-      "kid-friendly",
-      "nature",
-      "animals",
-      "full-day"
-    ],
-    "notes": "A family-friendly activity with animals and outdoor exploration."
-  },
-
-  {
-    "activity_id": "SG-A08",
-    "destination": "Singapore",
-    "name": "Science Centre Singapore",
-    "area": "Jurong East",
-    "duration_hours": 4,
-    "best_time": "Morning or afternoon",
-    "cost_inr": 1800,
-    "tags": [
-      "family",
-      "kid-friendly",
-      "science",
-      "indoor",
-      "easy-pace"
-    ],
-    "notes": "Interactive science exhibits suitable for families and children."
-  },
-  
-  {
     "activity_id": "DXB-A01",
     "destination": "Dubai",
     "name": "Old Dubai souks and creek abra ride",
-    "area": "Deira/Bur Dubai",
-    "duration_hours": 4,
-    "best_time": "Evening",
+    "area": "Deira and Bur Dubai",
+    "duration_hours": 3,
+    "best_time": "Late afternoon",
     "cost_inr": 1800,
-    "tags": [
-      "culture",
-      "food",
-      "low-cost",
-      "relaxed-pace"
-    ],
-    "notes": "Good low-cost culture block for Dubai."
+    "tags": ["culture", "food", "walkable", "low-cost", "relaxed-pace"],
+    "notes": "A relaxed heritage walk and creek crossing."
+  },
+  {
+    "activity_id": "DXB-A02",
+    "destination": "Dubai",
+    "name": "Al Fahidi heritage quarter",
+    "area": "Bur Dubai",
+    "duration_hours": 3,
+    "best_time": "Morning",
+    "cost_inr": 1400,
+    "tags": ["culture", "history", "walkable", "easy-pace"],
+    "notes": "A low-key visit to the historic district and museums."
+  },
+  {
+    "activity_id": "DXB-A03",
+    "destination": "Dubai",
+    "name": "Dubai Frame and Zabeel Park",
+    "area": "Zabeel",
+    "duration_hours": 3,
+    "best_time": "Late afternoon",
+    "cost_inr": 2600,
+    "tags": ["city-views", "landmark", "park", "easy-pace"],
+    "notes": "Includes time for the observation deck and a nearby park stroll."
+  },
+  {
+    "activity_id": "DXB-A04",
+    "destination": "Dubai",
+    "name": "Downtown Dubai and Burj Khalifa views",
+    "area": "Downtown Dubai",
+    "duration_hours": 4,
+    "best_time": "Sunset",
+    "cost_inr": 5200,
+    "tags": ["city-views", "landmark", "shopping", "premium"],
+    "notes": "Includes an observation-deck ticket; reserve time for breaks."
+  },
+  {
+    "activity_id": "DXB-A05",
+    "destination": "Dubai",
+    "name": "Jumeirah Beach sunset walk",
+    "area": "Jumeirah",
+    "duration_hours": 2,
+    "best_time": "Sunset",
+    "cost_inr": 800,
+    "tags": ["leisure", "beach", "views", "relaxed-pace", "low-cost"],
+    "notes": "A gentle coastal visit with open downtime."
+  },
+  {
+    "activity_id": "DXB-A06",
+    "destination": "Dubai",
+    "name": "Museum of the Future visit",
+    "area": "Trade Centre",
+    "duration_hours": 3,
+    "best_time": "Morning",
+    "cost_inr": 4500,
+    "tags": ["museum", "technology", "indoor", "easy-pace"],
+    "notes": "Timed entry may need advance booking."
+  },
+  {
+    "activity_id": "DXB-A07",
+    "destination": "Dubai",
+    "name": "Spice Souk and creekside food walk",
+    "area": "Deira",
+    "duration_hours": 3,
+    "best_time": "Early evening",
+    "cost_inr": 2200,
+    "tags": ["food", "culture", "local", "walkable", "easy-pace"],
+    "notes": "Allow a casual tasting budget for a walk through Old Dubai."
+  },
+  {
+    "activity_id": "DXB-A08",
+    "destination": "Dubai",
+    "name": "Dubai Miracle Garden",
+    "area": "Dubailand",
+    "duration_hours": 4,
+    "best_time": "Morning",
+    "cost_inr": 3200,
+    "tags": ["nature", "outdoors", "photography", "easy-pace"],
+    "notes": "This attraction is seasonal, so check operating dates."
+  },
+  {
+    "activity_id": "DXB-A09",
+    "destination": "Dubai",
+    "name": "Desert conservation safari",
+    "area": "Dubai Desert Conservation Reserve",
+    "duration_hours": 6,
+    "best_time": "Afternoon to evening",
+    "cost_inr": 7800,
+    "tags": ["nature", "adventure", "premium", "full-day"],
+    "notes": "A longer excursion; optional for relaxed itineraries."
   }
 ]

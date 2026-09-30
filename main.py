@@ -2,12 +2,12 @@
 
 import argparse
 
-from agents.manager import run_pipeline
+from orchestrator import run_pipeline
 from utils import pretty_json
 
 
 DEFAULT_REQUEST = (
-    "Plan a relaxed 4-day trip from Mumbai to Singapore for two people. Keep it "
+    "Plan a relaxed 4-day trip from Delhi to Dubai for two people. Keep it "
     "mid-budget, avoid red-eye flights, and prefer food, city views, and cultural "
     "sites. Schedule no more than one main activity per day, leave generous breaks "
     "and unplanned time, and keep the total hotel budget under ₹45,000."
@@ -20,7 +20,9 @@ def main() -> None:
     parser.add_argument("--show-trace", action="store_true")
     args = parser.parse_args()
 
-    print("Running manager, workers, critic, and revision...\n")
+    print(
+        "Running Trip Planner, Itinerary Composer, and Pace and Quality Reviewer...\n"
+    )
     result = run_pipeline(args.request)
 
     print("FINAL TRAVEL PLAN\n")
